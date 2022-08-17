@@ -36,3 +36,12 @@ F(i); // NON_COMPLIANT - user macro
 #define FD_SET(X)                                                              \
   int _##X // NON_COMPLIANT - redefinition of standard library macro
 FD_SET(j); // COMPLIANT - standard library macro
+
+void test_lambda() {
+    // Lambdas generate a function called _FUN that shouldn't be flagged
+    auto lambda = [](int i) { // COMPLIANT
+			return i > 0;
+		};
+
+    lambda(10);
+}

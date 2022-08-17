@@ -37,13 +37,14 @@ predicate isGeneratedByUserMacro(Declaration d) {
   )
 }
 
-from Locatable l, string s
+from Locatable l, string s, string type
 where
   not isExcluded(l, NamingPackage::useOfDoubleUnderscoreReservedPrefixQuery()) and
   (
-    exists(Macro m | l = m and isReservedMacroPrefix(m) and s = m.getName())
+    exists(Macro m | type = "Macro" and l = m and isReservedMacroPrefix(m) and s = m.getName())
     or
     exists(Declaration d |
+      type = "Declaration" and
       l = d and
       isReservedPrefix(d) and
       s = d.getName() and
@@ -54,4 +55,4 @@ where
       )
     )
   )
-select l, "Name $@ uses the reserved prefix '_'.", l, s
+select l, type + " $@ uses the reserved prefix '_'.", l, s

@@ -52,7 +52,11 @@ where
         not d.isInMacroExpansion()
         or
         isGeneratedByUserMacro(d)
-      )
+      ) and
+      // Exclude any compiler generated functions or variables, most notably the `_FUN ` function
+      // generated for lambda calls
+      not d.(Function).isCompilerGenerated() and
+      not d.(Variable).isCompilerGenerated()
     )
   )
 select l, type + " $@ uses the reserved prefix '_'.", l, s
